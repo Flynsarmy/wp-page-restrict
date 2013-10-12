@@ -50,6 +50,7 @@ function pr_get_page_content() {
 			$errors = '<div class="pr-message pr-error"><p>' . $errors . '</p></div>';
 		}
 
+		$user_login = '';
 		if ( !isset( $user_login ) && pr_GET('pr-user-login') )
 			$user_login = sanitize_user( pr_GET('pr-user-login') );
 

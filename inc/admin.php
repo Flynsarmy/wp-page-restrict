@@ -195,8 +195,8 @@ function page_restriction_status_meta_box ( $post ) {
 	else {
 		$the_IDs = pr_get_opt ('posts');
 	}
-	if ( ! is_array ( $page_ids ) )
-		$page_ids = array ();
+	if ( ! is_array ( $the_IDs ) )
+		$the_IDs = array ();
 ?>
 	<p>
 		<input name="pr" type="hidden" value="update" />

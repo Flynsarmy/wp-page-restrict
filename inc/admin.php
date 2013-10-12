@@ -68,35 +68,18 @@ function pr_filter_plugin_actions ( $links ) {
 // The options page
 function pr_admin_page () {
 	pr_ver_check ();
+
 	if ( pr_POST('action') == 'update' ) :
-		if ( pr_POST('update') == 'pages' ) :
-			$page_ids = pr_POST('page_id', array());
-			$post_ids = pr_POST('post_id', array());
-		else :
-			$page_ids = pr_get_opt ( 'pages' );
-			$post_ids = pr_get_opt ( 'posts' );
-		endif;
-		if ( ! is_array ( $page_ids ) )
-			$page_ids = array ();
-		$pr_options['pages'] = $page_ids;
-		$pr_options['posts'] = $post_ids;
-		$pr_method = pr_POST('method');
-		$pr_options['method'] = $pr_method;
-		$pr_options['version'] = pr_get_opt ( 'version' );
-		$pr_message = stripslashes(pr_POST('message'));
-		$pr_options['message'] = $pr_message;
-		if ( pr_POST('loginform') == 'true' )
-			$pr_options['loginform'] = true;
-		else
-			$pr_options['loginform'] = false;
-		$pr_options['pr_restrict_home'] = intval(pr_POST('pr_restrict_home', 0));
+		$pr_options = wp_parse_args(array(
+			'method' => pr_POST('method'),
+			'message' => stripslashes(pr_POST('message')),
+			'loginform' => pr_POST('loginform') == 'true',
+		), get_option('pr_options', array()) );
+
 		update_option ( 'pr_options' , $pr_options );
+
 		echo '<div id="message" class="updated fade"><p><strong>Settings saved.</strong></p></div>';
 	endif;
-	$page_ids = pr_get_opt ( 'pages' );
-	$post_ids = pr_get_opt ( 'posts' );
-       if ( ! is_array ( $page_ids ) )
-		$page_ids = array ();
 	$pr_method = pr_get_opt ( 'method' );
 	$pr_message = pr_get_opt ( 'message' );
 ?>
@@ -141,40 +124,7 @@ function pr_admin_page () {
 					</td>
 				</tr>
 			</table>
-<?php
-	if ( $pr_method == 'selected' ) :
-?>
-			<h3>Page List</h3>
-			<p>Select the pages that you wish to restrict to logged in users.</p>
-			<input type="hidden" name="update" value="pages" />
-			<select name="page_id[]" id="the_pages" multiple="multiple" size="15" style="height: 150px;width:400px;">
-<?php
-		$avail_pages = get_pages ();
-		foreach ( $avail_pages as $page ) :
-?>
-				<option value="<?php echo esc_attr($page->ID); ?>"<?php selected( true , in_array ( $page->ID , $page_ids ) ); ?>><?php echo esc_html($page->post_title); ?></option>
-<?php
-		endforeach;
-?>
-			</select>
 
-
-			<h3>Post List</h3>
-			<p>Select the posts that you wish to restrict to logged in users.</p>
-			<input type="hidden" name="update" value="pages" />
-			<select name="post_id[]" id="the_posts" multiple="multiple" size="15" style="height: 150px;width:400px;">
-<?php
-		$avail_posts = get_posts('showposts=-1');
-		foreach ( $avail_posts as $post ) :
-?>
-				<option value="<?php echo esc_attr($post->ID); ?>"<?php selected( true , in_array ( $post->ID , $post_ids ) ); ?>><?php echo esc_html($post->post_title); ?></option>
-<?php
-		endforeach;
-?>
-			</select>
-<?php
-	endif;
-?>
 			<br />
 			<p class="submit">
 				<input type="submit" name="submit" class="button-primary" value="Save Changes" />

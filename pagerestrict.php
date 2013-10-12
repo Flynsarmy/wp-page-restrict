@@ -20,7 +20,7 @@ if ( is_admin () )
 function pr_get_opt ( $option ) {
 	$pr_options = get_option ( 'pr_options' );
 	// clean up PHP warning for in_array() later when they have not been saved
-	if ( $option == 'posts' || $option == 'pages' ) {
+	if ( $option == 'posts' || $option == 'pages' || $option == 'post_types' ) {
 		if ( !isset($pr_options[$option]) || !is_array($pr_options[$option]) ) {
 			$pr_options[$option] = array();
 		}
@@ -88,10 +88,17 @@ function pr_page_restrict ( $pr_page_content ) {
 		( is_array(pr_get_opt('pages')) || is_array(pr_get_opt('posts')) )
 		&& ( count(pr_get_opt('pages')) + count(pr_get_opt('posts')) > 0 )
 	);
-	$pr_check = $pr_check || ( pr_get_opt('pr_restrict_home') && is_home() );
+
 	if ( !is_user_logged_in() && $pr_check ) :
 		// current post is in either page / post restriction array
 		$is_restricted = ( in_array($post->ID, pr_get_opt('pages')) || in_array($post->ID, pr_get_opt('posts')) ) && pr_get_opt ( 'method' ) != 'none';
+		foreach ( pr_get_opt('post_types') as $post_type )
+			if ( in_array($post->ID, $post_type) )
+			{
+				$is_restricted = true;
+				break;
+			}
+
 		// content is restricted OR everything is restricted
 		if ( (is_single() || is_page()) && ($is_restricted || pr_get_opt('method') == 'all') ):
 			$pr_page_content = pr_get_page_content();

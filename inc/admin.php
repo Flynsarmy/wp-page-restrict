@@ -68,28 +68,28 @@ function pr_filter_plugin_actions ( $links ) {
 // The options page
 function pr_admin_page () {
 	pr_ver_check ();
-	if ( $_POST && $_POST['action'] == 'update' ) :
-		if ( $_POST['update'] == 'pages' ) :
-			$page_ids = $_POST['page_id'];
-			$post_ids = $_POST['post_id'];
+	if ( pr_POST('action') == 'update' ) :
+		if ( pr_POST('update') == 'pages' ) :
+			$page_ids = pr_POST('page_id', array());
+			$post_ids = pr_POST('post_id', array());
 		else :
 			$page_ids = pr_get_opt ( 'pages' );
 			$post_ids = pr_get_opt ( 'posts' );
 		endif;
 		if ( ! is_array ( $page_ids ) )
-		$page_ids = array ();
+			$page_ids = array ();
 		$pr_options['pages'] = $page_ids;
 		$pr_options['posts'] = $post_ids;
-		$pr_method = $_POST['method'];
+		$pr_method = pr_POST('method');
 		$pr_options['method'] = $pr_method;
 		$pr_options['version'] = pr_get_opt ( 'version' );
-		$pr_message = stripslashes($_POST['message']);
+		$pr_message = stripslashes(pr_POST('message'));
 		$pr_options['message'] = $pr_message;
-		if ( $_POST['loginform'] == 'true' )
+		if ( pr_POST('loginform') == 'true' )
 			$pr_options['loginform'] = true;
 		else
 			$pr_options['loginform'] = false;
-		$pr_options['pr_restrict_home'] = (int) $_POST['pr_restrict_home'];
+		$pr_options['pr_restrict_home'] = intval(pr_POST('pr_restrict_home', 0));
 		update_option ( 'pr_options' , $pr_options );
 		echo '<div id="message" class="updated fade"><p><strong>Settings saved.</strong></p></div>';
 	endif;
@@ -221,8 +221,8 @@ function pr_meta_box () {
  * Get custom POST vars on edit/create page pages and update options accordingly
  */
 function pr_meta_save () {
-	if ( isset ( $_POST['pr'] ) && $_POST['pr'] == 'update' ) :
-		$post_ID = $_POST['post_ID'];
+	if ( pr_POST('pr') == 'update' ) :
+		$post_ID = pr_POST('post_ID');
 		$post = get_post($post_ID);
 		if ( $post->post_type == 'page' ) {
 			$restrict_type = 'pages';
@@ -235,7 +235,7 @@ function pr_meta_save () {
 		$restricted = $pr_options[ $restrict_type ];
 		if ( ! is_array ( $restricted ) )
 			$restricted = array ();
-		if ( ! empty ( $_POST['restriction_status'] ) && $_POST['restriction_status'] == 'on' ) :
+		if ( pr_POST('restriction_status') == 'on' ) :
 			$restricted[] = $post_ID ;
 			$pr_options[ $restrict_type ] = $restricted;
 		else :
@@ -253,7 +253,7 @@ function pr_meta_save () {
  * Remove item from array
  */
 function pr_array_delete ( $item ) {
-	return ( $item !== $_POST['post_ID'] );
+	return ( $item !== pr_POST('post_ID') );
 }
 
 /**

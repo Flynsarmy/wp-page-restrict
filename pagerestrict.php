@@ -43,15 +43,15 @@ function pr_get_page_content() {
 	if ( pr_get_opt ( 'loginform' ) == true ) :
 
 		$errors = '';
-		if ( isset( $_GET['wp-error'] ) )
+		if ( pr_GET('wp-error') )
 		{
-			$errors = strip_tags( $_GET['wp-error'] );
+			$errors = strip_tags( pr_GET('wp-error') );
 			$errors = str_ireplace( 'Lost your password?', '<a href="' . site_url( '/wp-login.php?action=lostpassword' ) . '">Lost your password?</a>', $errors );
 			$errors = '<div class="pr-message pr-error"><p>' . $errors . '</p></div>';
 		}
 
-		if ( !isset( $user_login ) && isset( $_GET['pr-user-login'] ) )
-			$user_login = sanitize_user( $_GET['pr-user-login'] );
+		if ( !isset( $user_login ) && pr_GET('pr-user-login') )
+			$user_login = sanitize_user( pr_GET('pr-user-login') );
 
 		$pr_page_content .= '
 		<form style="text-align: left;" action="' . get_bloginfo ( 'wpurl' ) . '/wp-login.php" method="post">
@@ -115,6 +115,20 @@ function pr_comment_restrict ( $pr_comment_array ) {
 	return $pr_comment_array;
 }
 
+function pr_GET( $option, $default = '' ) {
+	if ( isset($_GET[$option]) )
+		return $_GET[$option];
+
+	return $default;
+}
+
+function pr_POST( $option, $default = '' ) {
+	if ( isset($_POST[$option]) )
+		return $_POST[$option];
+
+	return $default;
+}
+
 // Add Actions
 add_action( 'send_headers' , 'pr_no_cache_headers' );
 
@@ -158,7 +172,7 @@ if ( sizeof( $_POST ) )
 function pr_authenticate( $error, $user, $pass )
 {
 	if ( !empty( $user ) )
-		$error->user_login = $_POST['log'];
+		$error->user_login = pr_POST('log');
 
 	if ( is_wp_error( $error ) )
 		do_action( 'wp_login_failed', $error );

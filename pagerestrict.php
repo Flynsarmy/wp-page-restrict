@@ -21,7 +21,7 @@ function pr_get_opt ( $option ) {
 	$pr_options = get_option ( 'pr_options' );
 	// clean up PHP warning for in_array() later when they have not been saved
 	if ( $option == 'posts' || $option == 'pages' ) {
-		if ( !is_array($pr_options[$option]) ) {
+		if ( !isset($pr_options[$option]) || !is_array($pr_options[$option]) ) {
 			$pr_options[$option] = array();
 		}
 	}

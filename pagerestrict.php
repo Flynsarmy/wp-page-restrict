@@ -57,7 +57,7 @@ function pr_get_page_content() {
 		<form style="text-align: left;" action="' . get_bloginfo ( 'wpurl' ) . '/wp-login.php" method="post">
 		' . $errors . '
 			<p>
-				<label for="log"><input type="text" name="log" id="log" value="' . wp_specialchars ( stripslashes ( $user_login ) , 1 ) . '" size="22" /> Username</label><br />
+				<label for="log"><input type="text" name="log" id="log" value="' . esc_html ( stripslashes ( $user_login ) , 1 ) . '" size="22" /> Username</label><br />
 				<label for="pwd"><input type="password" name="pwd" id="pwd" size="22" /> Password</label><br />
 				<input type="submit" name="submit" value="Log In" class="button" />
 				<label for="rememberme"><input name="rememberme" id="rememberme" type="checkbox" checked="checked" value="forever" /> Remember me</label><br />

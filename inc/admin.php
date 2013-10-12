@@ -152,7 +152,7 @@ function pr_admin_page () {
 		$avail_pages = get_pages ();
 		foreach ( $avail_pages as $page ) :
 ?>
-				<option value="<?php echo esc_attr($page->ID); ?>"<?php selected( true , in_array ( $page->ID , $page_ids ) ); ?>><?php echo wp_specialchars($page->post_title); ?></option>
+				<option value="<?php echo esc_attr($page->ID); ?>"<?php selected( true , in_array ( $page->ID , $page_ids ) ); ?>><?php echo esc_html($page->post_title); ?></option>
 <?php
 		endforeach;
 ?>
@@ -167,7 +167,7 @@ function pr_admin_page () {
 		$avail_posts = get_posts('showposts=-1');
 		foreach ( $avail_posts as $post ) :
 ?>
-				<option value="<?php echo esc_attr($post->ID); ?>"<?php selected( true , in_array ( $post->ID , $post_ids ) ); ?>><?php echo wp_specialchars($post->post_title); ?></option>
+				<option value="<?php echo esc_attr($post->ID); ?>"<?php selected( true , in_array ( $post->ID , $post_ids ) ); ?>><?php echo esc_html($post->post_title); ?></option>
 <?php
 		endforeach;
 ?>

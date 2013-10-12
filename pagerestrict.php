@@ -74,6 +74,7 @@ function pr_get_page_content() {
 		$pr_page_content .= '<a href="' . get_bloginfo ( 'wpurl' ) . '/wp-login.php?action=lostpassword">Lost your password?</a>
 		</p>
 		';
+		global $post;
 		$post->comment_status = 'closed';
 	endif;
 	return $pr_page_content;
